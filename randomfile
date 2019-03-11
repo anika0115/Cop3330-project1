@@ -1,9 +1,108 @@
+/**************************************************************
+ *
+ * GROUP #
+ * Group Members:
+ * Date Completed:
+ * Filename: shoppingCart.cpp
+ * 
+ **************************************************************/
+
+
 #include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <sstream>
+#include <vector> 
+#include <string>
 
 using namespace std;
 
+struct Address { string streetAddress; 
+                 string city;  
+                 string state;  
+                 string zipCode;   
+                };    
+
+struct Customer { string customerNum; 
+                  string customerName; 
+                  int lineOfCredit; 
+                  Address * corporateAddress;
+                 };
+
+/**************************************************************
+ *                             parse                          *
+ * Called by: <fill in>                                       *
+ * Passed   : 2 arguments: a string, a character that is the  *
+ *            delimiter                                       *
+ * Purpose  : Split a given string by its delimiter           *
+ * Returns  : String vector                                   *
+ **************************************************************/
+vector<string> parse(string line, char delimiter){
+    
+    vector<string> parsedLine;
+    istringstream stringStream( line ); //create string stream from the line
+    //iterate through the stream
+    while (stringStream)
+    {
+        string s;
+        //uses getline to get the values from the stream before the delimiting character
+        if (getline( stringStream, s, delimiter))
+          parsedLine.push_back(s);
+    }
+    return parsedLine;
+}
+
+/**************************************************************
+ *                  generateOrderNum                          *
+ * Called by: <fill in>                                       *                                       
+ * Purpose  : Generate an order number based on epoch         *
+ * Returns  : String order number                             *
+ **************************************************************/
+string generateOrderNum(){
+    
+    time_t now = time(0); //current time object
+    
+    string oNum;
+    stringstream strstream;
+    
+    strstream << now; //read the date/time in epoch into the string stream
+    strstream >> oNum; //output a string from the string stream
+    return oNum;
+}
+
 int main()
 {
-cout << hello world;
-return
+    string base;
+    string convert;
+    const int size = 21;
+    ifstream inF;
+    inF.open("customers.dat");
+    int i = 0;
+    int j = 0;
+    Customer cust;
+    Address add;
+    Customer Cust_arr [size];
+    Address Add_arr [size];
+    
+    
+    
+        while(getline(inF, base))
+    {
+        vector <string> parsedLine = parse(base,'|');
+        cust.customerNum = parsedLine[0];
+        cust.customerName = parsedLine[1];
+        convert = parsedLine[2];
+        cust.lineOfCredit = atoi(convert);
+        Cust_arr[i] = cust;
+        i++;
+    }
+    
+    
+    cout << Cust_arr;
+    
+                     
+    return 0;
+
 }
