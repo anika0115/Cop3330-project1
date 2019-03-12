@@ -1,8 +1,8 @@
 /**************************************************************
  *
- * GROUP #
- * Group Members:
- * Date Completed:
+ * GROUP #6
+ * Group Members: Jasen Clerisier, Anika Patel, Markeisa Graham, Markee Davis
+ * Date Completed: tba
  * Filename: shoppingCart.cpp
  * 
  **************************************************************/
@@ -19,17 +19,21 @@
 
 using namespace std;
 
-struct Address { string streetAddress; 
+struct Address { string streetAddress;        //struct for address data
                  string city;  
                  string state;  
                  string zipCode;   
                 };    
 
-struct Customer { string customerNum; 
+struct Customer { string customerNum;         //struct for customer data 
                   string customerName; 
                   int lineOfCredit; 
                   Address * corporateAddress;
                  };
+
+struct Product{ int itemNo;                    //struct for product data 
+                string description; 
+                double price; };
 
 /**************************************************************
  *                             parse                          *
@@ -74,33 +78,58 @@ string generateOrderNum(){
 
 int main()
 {
-    string base;
-    string convert;
-    const int size = 21;
-    ifstream inF;
-    inF.open("customers.dat");
-    int i = 0;
+    string base;                        //stores an entire line from the input file
+    string convert_lineOfCredit;        //temporary variable to converts customer lineOfCredit string to integer
+    string convert_itemNo;              //temporary variable to converts product itemNo string to integer
+    string convert_price;               //temporary variable to converts product price string to double
+    ifstream inFile1("customers.dat");  //declaration and opening of customers input file
+    ifstream inFile2("inventory.dat");  //declaration and opening of inventory input file
+    int i = 0;                          //incremented variable to store data being read from input
     int j = 0;
-    Customer cust;
-    Address add;
-    Customer Cust_arr [size];
-    Address Add_arr [size];
+    Customer cust;                      //temporary placeholder to store for Customer struct
+    Address add;                        //temporary placeholder to store for Address struct
+    Product prod;                       //temporary placeholder to store for Product struct
+    Customer Cust_arr [21];           //Customer array: holds Customer struct data
+    Address Add_arr [21];             //Address array: holds Address struct data
+    Product Prod_arr [20];            //Product array: holds Product struct data
     
     
     
-        while(getline(inF, base))
+        while(getline(inFile1, base))
     {
-        vector <string> parsedLine = parse(base,'|');
-        cust.customerNum = parsedLine[0];
-        cust.customerName = parsedLine[1];
-        convert = parsedLine[2];
-        cust.lineOfCredit = atoi(convert);
-        Cust_arr[i] = cust;
-        i++;
+        vector <string> CparsedLine = parse(base,'|');  
+            
+        cust.customerNum = CparsedLine[0];
+        cust.customerName = CparsedLine[1];
+        convert_lineOfCredit = CparsedLine[2];
+        istringstream (convert_lineOfCredit) >> cust.lineOfCredit;   //Reference: https://stackoverflow.com/questions/7663709/how-can-i-convert-a-stdstring-to-int
+        Cust_arr[i] = cust;    
+            
+            
+        vector <string> AparsedLine = parse(base,',');      
+            
+        add.streetAddress = AparsedLine[0];
+        add.city = AparsedLine[1];
+        add.state = AparsedLine[2];
+        add.zipCode = AparsedLine[3];
+        Add_arr[i] = add;    
+        }
+            
+        while(getline(inFile2, base))
+    {
+        vector <string> PparsedLine = parse(base,','); 
+            
+        convert_itemNo = PparsedLine[0];
+        istringstream (convert_itemNo) >> prod.itemNo;                //Reference: https://stackoverflow.com/questions/7663709/how-can-i-convert-a-stdstring-to-int
+        prod.description = PparsedLine[1];
+        convert_price = PparsedLine[2];  
+        istringstream (convert_price) >> prod.price;                  //Reference: https://stackoverflow.com/questions/7663709/how-can-i-convert-a-stdstring-to-int
+        Prod_arr[j] = prod;
+        j++;
     }
-    
-    
-    cout << Cust_arr;
+
+    cout << endl << Cust_arr[1].customerNum << " " << Cust_arr[1].customerName << " "<< Add_arr[1].city << " " << Add_arr[1].state << " " << Add_arr[1].zipCode << endl;
+
     
                      
     return 0;
